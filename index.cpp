@@ -22,11 +22,31 @@ auto cleanup = []()->void {
   spdlog::drop_all();
 };
 
+void err_handler(OCI_Error *err) {
+  printf(
+    "code  : ORA-%05i\n"
+    "msg   : %s\n"
+    "sql   : %s\n",
+    OCI_ErrorGetOCICode(err),
+    OCI_ErrorGetString(err),
+    OCI_GetSql(OCI_ErrorGetStatement(err))
+    );
+
+  spdlog::get("logger")->error("code: ORA-{0:05d} msg: {1:s} sql: {2:s}",
+    OCI_ErrorGetOCICode(err),
+    OCI_ErrorGetString(err),
+    OCI_GetSql(OCI_ErrorGetStatement(err)));
+  spdlog::get("logger")->flush();
+}
+
 auto start = []()->int {
 
   createFolder(SQL_FOLDER);
   createFolder(OUT_FOLDER);
   setupLogging();
+  
+  if (!OCI_Initialize(err_handler, NULL, OCI_ENV_THREADED))
+    return EXIT_FAILURE;
   
   //initialize orilib
   Environment::Initialize(Environment::Threaded);
@@ -109,7 +129,6 @@ int main(int argc, char* argv[]) {
     includeHeader = (vm["header"].as<bool>());
   }
   
-  //-----
   start();
 
   return EXIT_SUCCESS;

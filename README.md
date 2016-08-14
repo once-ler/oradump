@@ -23,6 +23,8 @@ oradump --sid test --user scott -pass tiger --file /home/foo/some.sql
 # Process entire directory
 oradump --sid test --user scott -pass tiger --dir /home/foo/lotta-sql-path/
 ```
+###Gotchas
+Make sure you set __TNS_ADMIN__ in your environment and that the admin folder contains valid tnsnames.ora and sqlnet.ora or your app will crash
 
 ###Dependencies
 This project could not be possible without the following fabulous libraries

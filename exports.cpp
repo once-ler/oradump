@@ -176,7 +176,7 @@ namespace {
     string basename = p.stem().generic_string();
 
     string outFile("out/" + basename + ".tsv");
-
+    
     ofstream of;
     of.open(outFile);
 
@@ -263,9 +263,10 @@ namespace {
       //of.close();
       //con.Close();
     }
-    catch (std::exception &ex){
+    catch (ocilib::Exception &ex){
       ss.str("");
-      ss << basename << " => " << ex.what();
+      
+      ss << basename << " => " << ex.GetOracleErrorCode() << " " << ex.GetMessageA();
       logger->error(ss.str());
     }
     
