@@ -39,6 +39,7 @@ void err_handler(OCI_Error *err) {
   spdlog::get("logger")->flush();
 }
 
+// Make sure TNS_ADMIN env is pointing to correct tnsnames.ora file.
 auto start = []()->int {
 
   createFolder(SQL_FOLDER);

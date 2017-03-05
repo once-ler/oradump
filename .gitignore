@@ -6,10 +6,11 @@
 /oradump.vcxproj.user
 /oradump.opensdf
 /oradump.sdf
-/start.cmd
+/*.cmd
 /concat.sh
 /combo.sql
 /extract-bcp.sh
 /start-bcp.cmd
 /*.log
 /oradump*.txt
+scripts/
