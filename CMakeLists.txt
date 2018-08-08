@@ -1,0 +1,48 @@
+cmake_minimum_required(VERSION 3.2)
+
+project(oradump VERSION 0.1.0 LANGUAGES C CXX)
+
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_CXX_FLAGS "-fno-stack-protector")
+
+set(Boost_USE_STATIC_LIBS ON)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+
+find_package(Threads)
+find_package(Boost 1.62.0 COMPONENTS thread date_time program_options filesystem system regex REQUIRED)
+
+MESSAGE( STATUS "PROJECT_SOURCE_DIR: " ${PROJECT_SOURCE_DIR} )
+MESSAGE( STATUS "CMAKE_CURRENT_SOURCE_DIR: " ${CMAKE_CURRENT_SOURCE_DIR} )
+
+set(OCI_INCLUDE /usr/include/oracle/18.3/client64)
+# Assume ocilib has been installed in /usr/local so no need to register.
+
+include_directories(
+    # "${PROJECT_SOURCE_DIR}/../include"
+    "${OCI_INCLUDE}"
+    )
+
+set(OCI_LIB_DIR /usr/lib/oracle/18.3/client64/lib)
+
+link_directories(${OCI_LIB_DIR})
+
+set(CPP_SOURCES ${PROJECT_SOURCE_DIR}/test/index.cpp)
+
+MESSAGE( STATUS "CPP_SOURCES: " ${CPP_SOURCES} )
+
+# Make static
+target_link_libraries(oradump -static)
+
+add_executable(oradump ${CPP_SOURCES})
+
+target_link_libraries(
+    oradump
+    ${Boost_LIBRARIES}
+    clntsh
+    ocilib   
+)
