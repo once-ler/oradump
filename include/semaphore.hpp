@@ -1,3 +1,5 @@
+#pragma once
+
 #include <mutex>
 #include <future>
 // a semaphore class
@@ -36,27 +38,22 @@ public:
 };
 
 template<typename Iterator, typename Func>
-void parallel_for_each(Iterator first, Iterator last, Func f)
-{
+void parallel_for_each(Iterator first, Iterator last, Func f) {
   ptrdiff_t const range_length = last - first;
   if (!range_length)
     return;
-  if (range_length == 1)
-  {
+  if (range_length == 1) {
     f(*first);
     return;
   }
 
   Iterator const mid = first + (range_length / 2);
 
-  std::future<void> bgtask = std::async(launch::async, &parallel_for_each<Iterator, Func>,
+  std::future<void> bgtask = std::async(std::launch::async, &parallel_for_each<Iterator, Func>,
     first, mid, f);
-  try
-  {
+  try {
     parallel_for_each(mid, last, f);
-  }
-  catch (...)
-  {
+  } catch (...) {
     bgtask.wait();
     throw;
   }

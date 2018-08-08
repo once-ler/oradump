@@ -1,5 +1,7 @@
+#pragma once
+
 #include "oradump.hpp"
-#include "base64.h"
+#include "base64.hxx"
 #include <regex>
 
 using namespace std;
@@ -26,7 +28,7 @@ namespace {
   auto readFile = [](string& f, string& dest)->bool {
     string line;
     stringstream ss;
-    ifstream ifs(f, ios::in | ios::binary | ios::ate);
+    std::ifstream ifs(f, ios::in | ios::binary | ios::ate);
     streampos size;
     if (ifs.is_open()) {
       ifs.seekg(0, ios::beg);
@@ -127,7 +129,7 @@ namespace {
     string outname("sql/");
     string basename = p.stem().generic_string();
     outname.append(basename + ".sql");
-    ofstream of(outname);
+    std::ofstream of(outname);
 
     //Get the right schema
     if (basename.find("_hub_") != string::npos){
@@ -177,8 +179,8 @@ namespace {
 
     string outFile("out/" + basename + ".tsv");
     
-    ofstream of;
-    of.open(outFile);
+    std::ofstream ofs;
+    ofs.open(outFile);
 
     Connection con(oraService, oraUser, oraPass);
 
@@ -204,12 +206,12 @@ namespace {
           auto sqlType = rs.GetColumn(i).GetFullSQLType();
           columns[i] = sqlType;
           string colName = rs.GetColumn(i).GetName();
-          of << colName;
+          ofs << colName;
           if (i < colCount){
-            of << "\t";
+            ofs << "\t";
           }
         }
-        of << "\n";
+        ofs << "\n";
       }      
 
       while (rs++) {
@@ -237,15 +239,15 @@ namespace {
           //handle quotes
           cell = std::regex_replace(cell, doubleQuotes, "");
 
-          std::replace(cell.begin(), cell.end(), '\r', '\s');
-          std::replace(cell.begin(), cell.end(), '\n', '\s');
+          std::replace(cell.begin(), cell.end(), '\r', ' ');
+          std::replace(cell.begin(), cell.end(), '\n', ' ');
 
-          of << cell;
+          ofs << cell;
           if (i < colCount){
-            of << "\t";
+            ofs << "\t";
           }
         }
-        of << "\n";
+        ofs << "\n";
 
       }
 
@@ -263,14 +265,14 @@ namespace {
       //of.close();
       //con.Close();
     }
-    catch (ocilib::Exception &ex){
+    catch (ocilib::Exception &ex) {
       ss.str("");
       
-      ss << basename << " => " << ex.GetOracleErrorCode() << " " << ex.GetMessageA();
+      ss << basename << " => " << ex.GetOracleErrorCode() << " " << ex.GetMessage();
       logger->error(ss.str());
     }
     
-    of.close();
+    ofs.close();
     con.Close();
 
     return 0;
