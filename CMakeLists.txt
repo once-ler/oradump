@@ -29,13 +29,13 @@ include_directories(
     )
 
 #[[
-Make sure LD_LIBRARY_PATH has the Oracle lib directory with libclntsh.so
+Make sure LD_LIBRARY_PATH has the Oracle lib directory with libclntsh.so and libocilib.so during runtime
 
 In your .bashrc for example:
 
 export ORACLE_HOME=/usr/lib/oracle/18.3/client64
 export PATH=$PATH:$ORACLE_HOME/bin
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ORACLE_HOME/lib
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ORACLE_HOME/lib:/usr/local/lib
 
 libclntsh.so requires libaio.so
 Ubuntu install:
