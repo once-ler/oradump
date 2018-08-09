@@ -29,13 +29,19 @@ include_directories(
     )
 
 #[[
-Make sure LD_LIBRARY_PATH has the Oracle lib directory with libclntsh.so and libocilib.so during runtime
+1. Make sure LD_LIBRARY_PATH has the Oracle lib directory with libclntsh.so and libocilib.so during runtime.
+2. Make sure to add tnsnames.ora and update TNS_ADMIN in your environment.
+   sudo mkdir -p $ORACLE_HOME/admin
+   sudo cp ./tnsnames.ora $ORACLE_HOME/admin
+   sudo chmod -R a+rx $ORACLE_HOME/admin
 
 In your .bashrc for example:
 
 export ORACLE_HOME=/usr/lib/oracle/18.3/client64
 export PATH=$PATH:$ORACLE_HOME/bin
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ORACLE_HOME/lib:/usr/local/lib
+
+export TNS_NAMES=$ORACLE_HOME/admin
 
 libclntsh.so requires libaio.so
 Ubuntu install:
