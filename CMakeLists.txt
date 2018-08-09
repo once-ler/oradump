@@ -41,7 +41,7 @@ export ORACLE_HOME=/usr/lib/oracle/18.3/client64
 export PATH=$PATH:$ORACLE_HOME/bin
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ORACLE_HOME/lib:/usr/local/lib
 
-export TNS_NAMES=$ORACLE_HOME/admin
+export TNS_ADMIN=$ORACLE_HOME/admin
 
 libclntsh.so requires libaio.so
 Ubuntu install:
