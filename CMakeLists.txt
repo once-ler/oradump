@@ -29,6 +29,11 @@ include_directories(
     )
 
 #[[
+1. Make sure to use the with-oracle-headers-path option to the configure command.
+   ./configure with-oracle-headers-path=/usr/include/oracle/18.3/client64
+]]
+
+#[[
 1. Make sure LD_LIBRARY_PATH has the Oracle lib directory with libclntsh.so and libocilib.so during runtime.
 2. Make sure to add tnsnames.ora and update TNS_ADMIN in your environment.
    sudo mkdir -p $ORACLE_HOME/admin
